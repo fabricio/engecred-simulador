@@ -1,8 +1,8 @@
 'use client';
 
 import React from 'react';
-import { Calculator, User, Building2, Banknote, Percent } from 'lucide-react';
-import { useSimulator } from '../hooks/useSimulator';
+import { Calculator, User, Building2, Banknote, Percent, Loader2 } from 'lucide-react';
+import { useSimulator } from '../app/hooks/useSimulator';
 
 export function Simulator() {
   const {
@@ -16,7 +16,19 @@ export function Simulator() {
     handleIncomeChange,
     result,
     getAvailableProducts,
+    loading,
   } = useSimulator();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#efefef] flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="h-12 w-12 text-[#00a091] animate-spin mx-auto mb-4" />
+          <p className="text-[#00353e]">Carregando dados...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#efefef]">
@@ -36,7 +48,7 @@ export function Simulator() {
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h2 className="text-xl font-semibold text-[#00353e] mb-6 flex items-center gap-2">
               <User className="h-5 w-5 text-[#00a091]" />
-              Dados do Cliente
+              Dados do cliente
             </h2>
 
             {/* Perfil */}
@@ -135,7 +147,7 @@ export function Simulator() {
               {result ? (
               <div className="space-y-4">
                 {result.error ? (
-                  <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="bg-red-50 border border-red-700 rounded-lg p-4">
                     <p className="text-red-700 font-medium">
                       {result.error}
                     </p>
@@ -181,8 +193,6 @@ export function Simulator() {
               </div>
             )}
             </div>
-
-
           </div>
         </div>
 
@@ -195,19 +205,19 @@ export function Simulator() {
             <div>
               <h4 className="font-medium text-[#79BA43] mb-2">Pessoa fisica (PF)</h4>
               <ul className="space-y-1 text-sm text-[#00353e]">
-                <li><strong>Basico (PF1):</strong> Renda anual ate R$ 2.000</li>
-                <li><strong>Intermediario (PF2):</strong> Renda anual de R$ 2.001 a R$ 20.000</li>
-                <li><strong>Premium (PF3):</strong> Renda anual de R$ 20.001 a R$ 200.000</li>
-                <li><strong>Black (PF4):</strong> Renda anual acima de R$ 200.000</li>
+                <li><strong>Basico (PF1):</strong> Renda anual ate R$ 2.000,00</li>
+                <li><strong>Intermediario (PF2):</strong> Renda anual de R$ 2.001,00 a R$ 20.000,00</li>
+                <li><strong>Premium (PF3):</strong> Renda anual de R$ 20.001,00 a R$ 200.000,00</li>
+                <li><strong>Black (PF4):</strong> Renda anual acima de R$ 200.000,00</li>
               </ul>
             </div>
             <div>
               <h4 className="font-medium text-[#B7CB33] mb-2">Pessoa juridica (PJ)</h4>
               <ul className="space-y-1 text-sm text-[#00353e]">
-                <li><strong>MEI (PJ1):</strong> Renda anual ate R$ 4.000</li>
-                <li><strong>Empresarial (PJ2):</strong> Renda anual de R$ 4.001 a R$ 400.000</li>
-                <li><strong>Corporativo (PJ3):</strong> Renda anual de R$ 400.001 a R$ 40.000.000</li>
-                <li><strong>Enterprise (PJ4):</strong> Renda anual acima de R$ 40.000.000</li>
+                <li><strong>MEI (PJ1):</strong> Renda anual ate R$ 4.000,00</li>
+                <li><strong>Empresarial (PJ2):</strong> Renda anual de R$ 4.001,00 a R$ 400.000,00</li>
+                <li><strong>Corporativo (PJ3):</strong> Renda anual de R$ 400.001,00 a R$ 40.000.000,00</li>
+                <li><strong>Enterprise (PJ4):</strong> Renda anual acima de R$ 40.000.000,00</li>
               </ul>
             </div>
           </div>
