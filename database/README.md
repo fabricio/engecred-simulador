@@ -14,7 +14,10 @@ Contém a definição completa do esquema do banco de dados, incluindo:
 
 ## Como Usar
 
-1. Execute o `-schema.sql` para criar a estrutura inicial do banco
+1. Crie um banco no sqlite utilizando o DB Browser ou outro cliente com o nome de simulador-credito.db
+
+2. Execute o `sqlite-schema.sql` para criar a estrutura inicial do banco
+
 
 ## Convenções
 
