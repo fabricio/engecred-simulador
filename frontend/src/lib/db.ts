@@ -1,8 +1,24 @@
-import Database from 'better-sqlite3';
-import path from 'path';
+import sql from 'mssql';
 
-const dbPath = path.join(process.cwd(), '..', 'database', 'simulador-credito.db');
+const config = {
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  server: process.env.DB_SERVER || 'localhost',
+  database: process.env.DB_NAME || 'SimuladorCredito',
+  options: {
+    encrypt: true,
+    trustServerCertificate: true,
+  },
+};
 
-const db = new Database(dbPath);
+export async function getConnection() {
+  try {
+    const pool = await sql.connect(config);
+    return pool;
+  } catch (error) {
+    console.error('Erro ao conectar ao banco de dados:', error);
+    throw error;
+  }
+}
 
-export default db;
+export default sql;
