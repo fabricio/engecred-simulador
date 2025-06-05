@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import db from '@/lib/db';
+import { getConnection } from '@/lib/db';
 
 export async function GET(request: Request) {
   try {
@@ -7,6 +7,7 @@ export async function GET(request: Request) {
     const productId = searchParams.get('productId');
     const segmentId = searchParams.get('segmentId');
 
+    const pool = await getConnection();
     let query = `
       SELECT r.*, p.Name as ProductName, p.Modality, p.PersonType,
              s.Code as SegmentCode, s.Name as SegmentName
@@ -15,20 +16,20 @@ export async function GET(request: Request) {
       INNER JOIN Segments s ON r.SegmentId = s.Id
     `;
 
-    const params: string[] = [];
+    const request = pool.request();
     if (productId) {
-      query += ' WHERE r.ProductId = ?';
-      params.push(productId);
+      query += ' WHERE r.ProductId = @productId';
+      request.input('productId', productId);
     }
     if (segmentId) {
-      query += productId ? ' AND r.SegmentId = ?' : ' WHERE r.SegmentId = ?';
-      params.push(segmentId);
+      query += productId ? ' AND r.SegmentId = @segmentId' : ' WHERE r.SegmentId = @segmentId';
+      request.input('segmentId', segmentId);
     }
 
     query += ' ORDER BY p.PersonType, p.Modality, p.Name, s.MinAnnualIncome';
 
-    const rates = db.prepare(query).all(...params);
-    return NextResponse.json(rates);
+    const result = await request.query(query);
+    return NextResponse.json(result.recordset);
   } catch (error) {
     console.error('Erro ao buscar taxas:', error);
     return NextResponse.json({ error: 'Erro ao buscar taxas' }, { status: 500 });
